@@ -12,4 +12,8 @@ CREATE TABLE "Article" (
     "content" TEXT NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT (now())
 );
+CREATE Table "User" (
+    "id" BIGSERIAL PRIMARY KEY,
+    "name" VARCHAR NOT NULL
+);
 

@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	dsn = "host=localhost user=root password=secret dbname=article_be port=5432 sslmode=disable"
+	dsn = "host=localhost user=root password=secret dbname=article_db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 )
 
 var DB *gorm.DB

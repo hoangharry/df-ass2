@@ -1,23 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import Example from './components/Navbar/Navbar';
+import ArticleCard from './components/MultiArticle/ArticleCard';
+import Pagination from './components/Pagination/Pagination';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Example/>
+       <h1 className="text-3xl font-bold underline">
+          Hello world!
+        </h1>
+      <div className="grid grid-cols-3 gap-4">
+      <ArticleCard />
+      <ArticleCard />
+      <ArticleCard />
+      <ArticleCard />
+      <ArticleCard />
+      </div>
+      <Pagination />
+      
     </div>
   );
 }
