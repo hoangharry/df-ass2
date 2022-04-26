@@ -1,9 +1,11 @@
 import './App.css';
-import Example from './components/Navbar/Navbar';
+import Navbar from './components/Shared/Navbar';
 import ArticleCard from './components/MultiArticle/ArticleCard';
 import Pagination from './components/Pagination/Pagination';
 import SingleArticle from './components/SingleArticle/Article';
 import Content from './components/SingleArticle/Content';
+import EditArticle from './components/SingleArticle/EditArticle';
+import SuccessModal from './components/Shared/SuccesModal';
 
 function App() {
   return (
@@ -20,7 +22,9 @@ function App() {
       <ArticleCard />
       </div>
       <Pagination /> */}
-      <SingleArticle />
+      {/* <SingleArticle /> */}
+      {/* <EditArticle/> */}
+      <SuccessModal />
     </div>
   );
 }
