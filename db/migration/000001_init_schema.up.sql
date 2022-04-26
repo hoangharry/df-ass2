@@ -4,7 +4,7 @@
 --     "pwd" TEXT NOT NULL
 -- );
 
-CREATE TABLE "Article" (
+CREATE TABLE "article" (
     "id" BIGSERIAL PRIMARY KEY,
     "category" VARCHAR NOT NULL,
     "user_id" BIGINT,
@@ -12,7 +12,7 @@ CREATE TABLE "Article" (
     "content" TEXT NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT (now())
 );
-CREATE Table "User" (
+CREATE Table "user" (
     "id" BIGSERIAL PRIMARY KEY,
     "name" VARCHAR NOT NULL
 );

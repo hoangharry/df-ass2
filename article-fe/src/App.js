@@ -2,11 +2,13 @@ import './App.css';
 import Example from './components/Navbar/Navbar';
 import ArticleCard from './components/MultiArticle/ArticleCard';
 import Pagination from './components/Pagination/Pagination';
+import SingleArticle from './components/SingleArticle/Article';
+import Content from './components/SingleArticle/Content';
 
 function App() {
   return (
     <div className="App">
-      <Example/>
+      {/* <Example/>
        <h1 className="text-3xl font-bold underline">
           Hello world!
         </h1>
@@ -17,8 +19,8 @@ function App() {
       <ArticleCard />
       <ArticleCard />
       </div>
-      <Pagination />
-      
+      <Pagination /> */}
+      <SingleArticle />
     </div>
   );
 }

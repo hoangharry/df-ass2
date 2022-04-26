@@ -1,14 +1,9 @@
-import { useEffect } from 'react';
-import { useRemark } from 'react-remark';
+import ReactMarkdown from "react-markdown";
 
 const Content = ({ content }) => {
-    const [srcContent, setSrcContent] = useRemark();
-
-    useEffect(() => {
-        setSrcContent(content);
-    });
-
-    return srcContent;
+    return (
+        <ReactMarkdown source={content}/>
+    );
 }
 
 export default Content;
