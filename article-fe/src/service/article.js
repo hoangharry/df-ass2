@@ -16,3 +16,9 @@ export const createArticle = (article) => {
         article: article,
     });
 }
+
+export const editArticle = (article) => {
+    return axios.put(ARTICLE_URL + '/' + article.id, {
+        article: article,
+    })
+}

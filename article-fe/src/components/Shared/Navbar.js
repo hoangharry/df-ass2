@@ -1,20 +1,26 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { BellIcon, MenuIcon, XIcon, DocumentAddIcon } from '@heroicons/react/outline'
+import { Disclosure } from '@headlessui/react'
+import { MenuIcon, XIcon, DocumentAddIcon } from '@heroicons/react/outline';
+import { useNavigate } from 'react-router-dom';
+
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
+  { name: 'Feed', href: '/', current: false },
+  { name: 'My Articles', href: '/', current: false },
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Navbar() {
+export default function Navbar({ current }) {
+  const navigate = useNavigate();
+  if (current !== null) {
+    console.log(current);
+    const idx = navigation.findIndex((v) => v.name === current);
+    navigation[idx].current = true;
+  }
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -63,21 +69,13 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
-              {/* <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"> */}
               <div className='absolute inset-y-0 right-0 flex items-center'>
-                {/* <button
-                    type='button'
-                    className='bg-gray-800 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
-
+                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex"
+                  onClick={() => navigate('/add-article')}
                 >
-                    <span>New Article</span>
-                    <svg class="h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"></svg>
-                </button> */}
-                <button class="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex">
-                    <DocumentAddIcon className="h-6 w-6" aria-hidden="true"/>
-                    <span className='pt-0.5 pl-0.5'>Add article</span>
-                    </button>
-                
+                  <DocumentAddIcon className="h-6 w-6" aria-hidden="true" />
+                  <span className='pt-0.5 pl-0.5'>Add article</span>
+                </button>
               </div>
             </div>
           </div>

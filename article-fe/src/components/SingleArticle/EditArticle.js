@@ -1,6 +1,7 @@
 import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { useState } from "react";
-import SuccessModal from "../Shared/SuccesModal";
+import Modal from "../Shared/Modal";
+import Navbar from "../Shared/Navbar";
 
 const EditArticle = () => {
     const article = { title: '', description: '', content: '' };
@@ -8,40 +9,58 @@ const EditArticle = () => {
     const [description, setDescription] = useState(article.description);
     const [content, setContent] = useState(article.content);
     const [isModal, setIsModal] = useState(false);
+    const [isFailed, setIsFailed] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalContent, setModalContent] = useState('');
+    const [link, setLink] = useState('');
 
     const formIsValid = title !== '' && description !== '' && content !== '';
 
     const titleHandler = (e) => {
-        console.log('title');
         setTitle(e.target.value);
     }
 
     const descriptionHandler = (e) => {
-        console.log('description');
         setDescription(e.target.value);
     }
 
     const contentHandler = (e) => {
-        console.log('content');
         setContent(e.target.value);
     }
 
-    const onSubmit = () => {
+    const onSave = () => {
+        console.log('onSave');
         if (!formIsValid) {
-            console.log('form is not valid');
+            console.log('not valid')
+            setIsModal(true);
+            setModalTitle('Opps');
+            setModalContent('Your form is not valid');
+            setIsFailed(true)
             return;
         }
         setIsModal(true);
-    }
-    const onSave = () => {
-        console.log('onSave');
-        setIsModal(true);
+        setIsFailed(false);
+        setModalTitle('Successful');
+        setModalContent('Your article has been created successfully');
+        setLink('/');
     }
 
     return (
-        <div className="py-8 px-8 max-w-[80%] mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:items-center sm:space-y-0 sm:space-x-6">
+        <>
+        <Navbar current={null}/>
+        {
+                isModal && (
+                    <div
+                        className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                        id="my-modal"
+                    >
+                        <Modal isFailed={isFailed} title={modalTitle} content={modalContent} link={link} setModal={setIsModal}/>
+                    </div>
+                )
+            }
+            <div className="py-8 px-8 max-w-[80%] mx-auto bg-white rounded-xl shadow-lg space-y-2 sm:py-4 sm:items-center sm:space-y-0 sm:space-x-6">
             <div className="col-span-6 sm:col-span-4 pb-4 ml-14">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 pb-4">
                     Title
                 </label>
                 <input
@@ -56,7 +75,7 @@ const EditArticle = () => {
             </div>
 
             <div>
-                <label htmlFor="about" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="about" className="block text-sm font-medium text-gray-700 ml-8 pb-4">
                     Description
                 </label>
                 <div className="mt-1 ml-8">
@@ -73,13 +92,13 @@ const EditArticle = () => {
 
             <main>
                 <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-                                    Content
-                                </label>
+                    <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+                        Content
+                    </label>
                     <div className="px-4 py-6 sm:px-0">
                         <div className="border-4 border-dashed border-gray-200 rounded-lg h-96">
                             <div>
-                                
+
                                 <div className="mt-1">
                                     <textarea
                                         id="content"
@@ -96,18 +115,18 @@ const EditArticle = () => {
                 </div>
             </main>
             <div className="insert-x-0 flex justify-center">
-                <button 
-                // disabled={!formIsValid} 
-                onClick={onSave}
-                className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex">
+                <button
+                    // disabled={!formIsValid} 
+                    onClick={onSave}
+                    className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex">
                     <BadgeCheckIcon className="h-6 w-6" aria-hidden="true" />
                     <span className='pt-0.5 pl-0.5'>Save</span>
                 </button>
             </div>
-            {
-                isModal && <SuccessModal />
-            }
+            
         </div>
+        </>
+        
     )
 }
 
