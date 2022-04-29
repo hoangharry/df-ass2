@@ -3,9 +3,10 @@ package controllers
 import (
 	"df-ass2/article-be/database"
 	"df-ass2/article-be/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func PostArticle(c *gin.Context) {
@@ -16,7 +17,7 @@ func PostArticle(c *gin.Context) {
 
 	art := models.Article{
 		Category:    category,
-		UserId:      uint(userId),
+		UserID:      uint(userId),
 		Description: description,
 		Content:     content,
 	}
@@ -39,6 +40,12 @@ func GetArticleById(c *gin.Context) {
 	var art models.Article
 	database.DB.Where("id = ", id).First(&art)
 	c.JSON(http.StatusOK, art)
+}
+
+func CountArticles(c *gin.Context) (int64, error) {
+	var num int64
+	database.DB.Table("article").Count(&num)
+	return num, nil
 }
 
 //func PutArticle(c *gin.Context) {

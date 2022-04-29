@@ -5,8 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Setup(route *gin.Engine) {
-	route.POST("/aticle", controllers.PostArticle)
-	route.GET("/article/:id", controllers.GetArticleById)
-	route.GET("/article", controllers.GetArticles)
+func Setup(router *gin.Engine) {
+	v1 := router.Group("/v1")
+	{
+		v1.POST("/aticle", controllers.PostArticle)
+		v1.GET("/article/:id", controllers.GetArticleById)
+		v1.GET("/article", controllers.GetArticles)
+	}
+
 }
