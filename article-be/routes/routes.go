@@ -5,13 +5,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Setup(router *gin.Engine) {
+func Setup(router *gin.Engine, c controllers.Controllers) {
+
 	v1 := router.Group("/v1")
+	articleGroup := v1.Group("/articles")
 	{
-		v1.POST("/article", controllers.PostArticle)
-		v1.GET("/article/:id", controllers.GetArticleByID)
-		v1.GET("/article", controllers.GetArticles)
-		v1.PUT("/article/:id", controllers.EditArticleByID)
+		articleGroup.GET("/", c.ArticleController.GetArticles)
+		articleGroup.GET("/:id", c.ArticleController.GetArticleByID)
+		articleGroup.POST("/", c.ArticleController.PostArticle)
+		articleGroup.PUT("/:id", c.ArticleController.EditArticleByID)
+		articleGroup.DELETE("/:id", c.ArticleController.DeleteArticleByID)
 	}
 
 }

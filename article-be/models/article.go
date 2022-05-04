@@ -7,13 +7,20 @@ type Article struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Content     string `json:"content"`
-	CreatedAt   int    `json:"created_at"`
+	CreatedAt   int64  `json:"created_at"`
+	Deleted     bool   `json:"deleted"`
 }
 
 type ArticleReq struct {
-	Category    string `json:"category"`
-	UserID      uint   `json:"user_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Content     string `json:"content"`
+	ID          uint   `json:"id" binding:"omitempty,gt=0"`
+	Category    string `json:"category" binding:"required"`
+	UserID      uint   `json:"user_id" binding:"omitempty,gt=0"`
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Content     string `json:"content" binding:"required"`
+}
+
+type ArticlesRes struct {
+	Total int64     `json:"total"`
+	Data  []Article `json:"data"`
 }
