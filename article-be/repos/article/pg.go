@@ -17,32 +17,24 @@ func NewReposArticle(db *gorm.DB) *ReposArticle {
 
 func (r *ReposArticle) GetArticleByID(id int64) (models.Article, error) {
 	art := models.Article{}
-	return art, r.db.Table("article").Where(map[string]interface{}{"id": id, "deleted": false}).First(&art).Error
+	return art, r.db.Table("article").Where("id = ?", id).First(&art).Error
 }
 
 func (r *ReposArticle) GetArticles(page int64, size int) ([]models.Article, error) {
 	var arts []models.Article
-	return arts, r.db.Table("article").Where("deleted = ?", false).Order("created_at desc").Limit(size).Offset(int(page-1) * size).Find(&arts).Error
+	return arts, r.db.Table("article").Order("created_at desc").Limit(size).Offset(int(page-1) * size).Find(&arts).Error
 }
 
 func (r *ReposArticle) AddArticle(art models.Article) error {
 	return r.db.Table("article").Create(&art).Error
 }
 
-func (r *ReposArticle) EditArticleByID(newArt models.ArticleReq) (models.Article, error) {
-	art := models.Article{}
-	r.db.Table("article").Where("id = ?", newArt.ID).First(&art)
-	art.Title = newArt.Title
-	art.Description = newArt.Description
-	art.Content = newArt.Content
-	return art, r.db.Table("article").Save(&art).Error
+func (r *ReposArticle) EditArticleByID(newArt models.Article) (models.Article, error) {
+	return newArt, r.db.Table("article").Save(&newArt).Error
 }
 
-func (r *ReposArticle) DeleteArticleByID(id int64) error {
-	art := models.Article{}
-	r.db.Table("article").First(&art, id)
-	art.Deleted = true
-	return r.db.Table("article").Save(&art).Error
+func (r *ReposArticle) DeleteArticleByID(art models.Article) error {
+	return r.db.Table("article").Delete(&art).Error
 }
 
 func (r *ReposArticle) CountArticles() (int64, error) {

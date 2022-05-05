@@ -51,18 +51,18 @@ func (mw logMW) AddArticle(art models.Article) (err error) {
 	return mw.Article.AddArticle(art)
 }
 
-func (mw logMW) EditArticleByID(newArt models.ArticleReq) (art models.Article, err error) {
+func (mw logMW) EditArticleByID(newArt models.Article) (art models.Article, err error) {
 	defer func(begin time.Time) {
 		mw.Log("EditArticleByID", newArt, art, err, time.Since(begin))
 	}(time.Now())
 	return mw.Article.EditArticleByID(newArt)
 }
 
-func (mw logMW) DeleteArticleByID(id int64) (err error) {
+func (mw logMW) DeleteArticleByID(art models.Article) (err error) {
 	defer func(begin time.Time) {
-		mw.Log("DeleteArticleByID", id, nil, err, time.Since(begin))
+		mw.Log("DeleteArticleByID", art, nil, err, time.Since(begin))
 	}(time.Now())
-	return mw.Article.DeleteArticleByID(id)
+	return mw.Article.DeleteArticleByID(art)
 }
 
 func (mw logMW) CountArticles() (num int64, err error) {

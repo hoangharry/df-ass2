@@ -6,7 +6,7 @@ type Article interface {
 	GetArticleByID(id int64) (models.Article, error)
 	GetArticles(page int64, size int) ([]models.Article, error)
 	AddArticle(art models.Article) error
-	EditArticleByID(newArt models.ArticleReq) (models.Article, error)
-	DeleteArticleByID(id int64) error
+	EditArticleByID(newArt models.Article) (models.Article, error)
+	DeleteArticleByID(art models.Article) error
 	CountArticles() (int64, error)
 }

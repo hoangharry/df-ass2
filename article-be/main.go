@@ -6,6 +6,7 @@ import (
 	"df-ass2/article-be/middlewares"
 	"df-ass2/article-be/repos"
 	"df-ass2/article-be/repos/article"
+	"df-ass2/article-be/repos/user"
 	"df-ass2/article-be/routes"
 	"fmt"
 	"github.com/gin-contrib/cors"
@@ -42,12 +43,17 @@ func main() {
 			article.NewReposArticle(db),
 			article.LogMW(logger),
 		).(article.Article),
+		UserService: middlewares.Compose(
+			user.NewReposUser(db),
+			user.LogMW(logger),
+		).(user.User),
 	}
 
 	// controller init add service and log
 	var c controllers.Controllers
 	c = controllers.Controllers{
 		ArticleController: controllers.NewArticleControllers(&service),
+		UserController:    controllers.NewUserController(&service),
 	}
 
 	r := gin.Default()

@@ -1,5 +1,6 @@
 package controllers
 
 type Controllers struct {
-	ArticleController articleController
+	ArticleController ArticleController
+	UserController    UserController
 }

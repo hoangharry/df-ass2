@@ -1,14 +1,18 @@
 package models
 
+import (
+	"gorm.io/plugin/soft_delete"
+)
+
 type Article struct {
-	ID          uint   `json:"id"`
-	Category    string `json:"category"`
-	UserID      uint   `json:"user_id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Content     string `json:"content"`
-	CreatedAt   int64  `json:"created_at"`
-	Deleted     bool   `json:"deleted"`
+	ID          uint                  `json:"id"`
+	Category    string                `json:"category"`
+	UserID      uint                  `json:"user_id"`
+	Title       string                `json:"title"`
+	Description string                `json:"description"`
+	Content     string                `json:"content"`
+	CreatedAt   int64                 `json:"created_at"`
+	IsDeleted   soft_delete.DeletedAt `json:"is_deleted" gorm:"softDelete:flag"`
 }
 
 type ArticleReq struct {

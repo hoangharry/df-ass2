@@ -10,7 +10,11 @@ require (
 	gorm.io/gorm v1.23.4
 )
 
-require github.com/sirupsen/logrus v1.4.2
+require (
+	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
+	github.com/sirupsen/logrus v1.4.2
+	gorm.io/plugin/soft_delete v1.1.0
+)
 
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
