@@ -8,12 +8,12 @@ import { getArticleById } from "../../service/article";
 import Navbar from "../Shared/Navbar";
 
 const SingleArticle = () => {
-    const [article, setArticle] = useState({title: '', description:'', content: '', })
+    // const [article, setArticle] = useState({title: '', description:'', content: '', })
     let {id} = useParams();
     const getArticle = async (id) => {
         const result = await getArticleById(id);
         if (result.status === 200) {
-            setArticle(result.data);
+            // setArticle(result.data);
         }
         
     }
@@ -22,12 +22,12 @@ const SingleArticle = () => {
         getArticle(id);
     });
 
-    // const article = {
-    //     id: 1,
-    //     title: "Hello it's a demo",
-    //     description: "it's ademo and write in markdowm format. it's quite simple",
-    //     content: "## Hello, **world**!",
-    // }
+    const article = {
+        id: 1,
+        title: "Hello it's a demo",
+        description: "it's ademo and write in markdowm format. it's quite simple",
+        content: "## Hello, **world**!",
+    }
     return (
         <>
         <Navbar current={null}/>
@@ -51,7 +51,7 @@ const SingleArticle = () => {
                 </div>
             </main>
             <div className="insert-x-0 flex justify-center">
-                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex">
+                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white hover:text-white px-3 py-2 rounded-md text-sm font-medium flex">
                     <Link to='/edit-article'>
                     <PencilAltIcon className="h-6 w-6" aria-hidden="true" />
                     </Link>

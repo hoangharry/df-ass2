@@ -1,5 +1,6 @@
 import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { useState } from "react";
+import { createArticle } from "../../service/article";
 import Modal from "../Shared/Modal";
 import Navbar from "../Shared/Navbar";
 
@@ -38,11 +39,13 @@ const EditArticle = () => {
             setIsFailed(true)
             return;
         }
+        createArticle({title, description, content});
         setIsModal(true);
         setIsFailed(false);
         setModalTitle('Successful');
         setModalContent('Your article has been created successfully');
         setLink('/');
+
     }
 
     return (
@@ -69,6 +72,7 @@ const EditArticle = () => {
                     id="title"
                     autoComplete="title"
                     placeholder="Title"
+                    required
                     onChange={titleHandler}
                     className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md h-10"
                 />
@@ -85,6 +89,7 @@ const EditArticle = () => {
                         rows={3}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                         placeholder="Brief description about your article"
+                        required
                         onChange={descriptionHandler}
                     />
                 </div>
@@ -106,6 +111,7 @@ const EditArticle = () => {
                                         rows={18}
                                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                         placeholder="Content of your article"
+                                        required
                                         onChange={contentHandler}
                                     />
                                 </div>
@@ -118,7 +124,7 @@ const EditArticle = () => {
                 <button
                     // disabled={!formIsValid} 
                     onClick={onSave}
-                    className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex">
+                    className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white hover:text-white px-3 py-2 rounded-md text-sm font-medium flex">
                     <BadgeCheckIcon className="h-6 w-6" aria-hidden="true" />
                     <span className='pt-0.5 pl-0.5'>Save</span>
                 </button>

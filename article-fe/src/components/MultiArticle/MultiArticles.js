@@ -6,27 +6,28 @@ import ArticleCard from "./ArticleCard";
 import { getArticles } from "../../service/article";
 
 const MultiArticles = () => {
-    const [articles, setArticles] = useState([]);
+    // const [articles, setArticles] = useState([]);
     const [total, setTotal] = useState(0);
     const [curPage, setCurPage] = useState(1);
     const getArticlesView = async (page) => {
         const result = await getArticles(page);
         if (result.status === 200) {
+            console.log(result.data)
             setTotal(result.data.total);
-            setArticles(result.data.data);
+            // setArticles(result.data.data);
         }
     }
 
-    useEffect(() => {
-        getArticlesView(curPage);
-    }, [curPage, articles])
-    // const articles = [
-    //     { title: "hi it's me", description: 'none', content: 'opppppssss'},
-    //     { title: "hi it's me", description: 'none', content: 'opppppssss'},
-    //     { title: "hi it's me", description: 'none', content: 'opppppssss'},
-    //     { title: "hi it's me", description: 'none', content: 'opppppssss'},
-    //     { title: "hi it's me", description: 'none', content: 'opppppssss'},
-    // ];
+    // useEffect(() => {
+    //     getArticlesView(curPage);
+    // }, [curPage])
+    const articles = [
+        { id: 1, title: "hi it's me", description: 'none', content: 'opppppssss'},
+        { id: 2, title: "hi it's me", description: 'none', content: 'opppppssss'},
+        { id: 3, title: "hi it's me", description: 'none', content: 'opppppssss'},
+        { id: 4, title: "hi it's me", description: 'none', content: 'opppppssss'},
+        { id: 5, title: "hi it's me", description: 'none', content: 'opppppssss'},
+    ];
 
     return (
         <>
@@ -35,8 +36,8 @@ const MultiArticles = () => {
             {
                 articles.map((value, idx) => {
                     return (
-                        <Link to={'/article/' + idx}>
-                            <ArticleCard id={idx} article={value}/>
+                        <Link to={'/article/' + value.id}>
+                            <ArticleCard id={value.id} article={value}/>
                         </Link>
                         
                     )

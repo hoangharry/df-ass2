@@ -70,7 +70,7 @@ export default function Navbar({ current }) {
                 </div>
               </div>
               <div className='absolute inset-y-0 right-0 flex items-center'>
-                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex"
+                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white hover:text-white px-3 py-2 rounded-md text-sm font-medium flex"
                   onClick={() => navigate('/add-article')}
                 >
                   <DocumentAddIcon className="h-6 w-6" aria-hidden="true" />
