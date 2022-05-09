@@ -1,6 +1,7 @@
 package main
 
 import (
+	"df-ass2/article-be/cfg"
 	"df-ass2/article-be/controllers"
 	"df-ass2/article-be/database"
 	"df-ass2/article-be/middlewares"
@@ -12,13 +13,11 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"os"
 )
 
 func main() {
 	logger := log.New()
-
 	{
 		log.SetFormatter(&log.TextFormatter{
 			DisableColors: true,
@@ -27,15 +26,14 @@ func main() {
 		log.SetOutput(os.Stdout)
 
 	}
-	viper.SetConfigFile(".env")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %w \n", err))
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Errorf("Cannot get path: %w \n", err))
 	}
-	serverPort := ":" + fmt.Sprint(viper.Get("SERVER_PORT"))
-	db := database.Connect(fmt.Sprint(viper.Get("DB_STR")))
 
+	cfg.ReadEnv(wd)
+	serverPort := fmt.Sprintf(":%s", cfg.ConfigMap["SERVER_PORT"])
+	db := database.Connect(fmt.Sprint(cfg.ConfigMap["DB_STR"]))
 	// service (repos) init add log and db to service
 	var service repos.Service
 	service = repos.Service{
@@ -58,7 +56,7 @@ func main() {
 
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"http://localhost:3000"},
+		AllowOrigins: []string{"*"},
 	}))
 	routes.Setup(r, c)
 

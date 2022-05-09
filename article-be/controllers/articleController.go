@@ -4,7 +4,6 @@ import (
 	"df-ass2/article-be/models"
 	"df-ass2/article-be/repos"
 	"df-ass2/article-be/utils/token"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -40,11 +39,11 @@ func (c *ArticleController) PostArticle(ctx *gin.Context) {
 		Description: body.Description,
 		Content:     body.Content,
 		Title:       body.Title,
-		CreatedAt:   time.Now().Unix(),
+		CreatedAt:   time.Now(),
 	}
 	err = c.repo.ArticleService.AddArticle(art)
 	if err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.String(http.StatusCreated, "success")
@@ -60,16 +59,15 @@ func (c *ArticleController) GetArticles(ctx *gin.Context) {
 	if page.Size == 0 {
 		page.Size = 10
 	}
-	fmt.Println(page)
 	arts, err := c.repo.ArticleService.GetArticles(int64(page.Page), page.Size)
 	if err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	var num int64
 	num, err = c.repo.ArticleService.CountArticles()
 	if err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	res := models.ArticlesRes{
@@ -78,6 +76,34 @@ func (c *ArticleController) GetArticles(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, res)
 
+}
+
+func (c *ArticleController) GetArticlesOfUser(ctx *gin.Context) {
+	var page models.Pagination
+	if err := ctx.ShouldBind(&page); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "query params are not valid"})
+		return
+	}
+	var arts []models.Article
+	if page.Size == 0 {
+		page.Size = 10
+	}
+	uid := ctx.GetUint("user_id")
+	arts, err := c.repo.ArticleService.GetArticlesOfUser(int64(page.Page), page.Size, uid)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	num, err := c.repo.ArticleService.CountArticlesOfUser(uid)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	res := models.ArticlesRes{
+		Total: num,
+		Data:  arts,
+	}
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (c *ArticleController) GetArticleByID(ctx *gin.Context) {
@@ -121,7 +147,7 @@ func (c *ArticleController) EditArticleByID(ctx *gin.Context) {
 
 	art, err = c.repo.ArticleService.EditArticleByID(art)
 	if err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, art)
@@ -145,7 +171,7 @@ func (c *ArticleController) DeleteArticleByID(ctx *gin.Context) {
 	}
 	err = c.repo.ArticleService.DeleteArticleByID(art)
 	if err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, "deleted successfully")

@@ -17,6 +17,7 @@ func Setup(router *gin.Engine, c controllers.Controllers) {
 	articleGroup.Use(middlewares.JwtAuthMiddleware())
 	{
 		articleGroup.GET("/", c.ArticleController.GetArticles)
+		articleGroup.GET("/my", c.ArticleController.GetArticlesOfUser)
 		articleGroup.GET("/:id", c.ArticleController.GetArticleByID)
 		articleGroup.POST("/", c.ArticleController.PostArticle)
 		articleGroup.PUT("/:id", c.ArticleController.EditArticleByID)

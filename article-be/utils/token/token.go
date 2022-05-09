@@ -13,7 +13,6 @@ import (
 func GenerateToken(userID uint) (string, error) {
 	tokenLifespan, _ := strconv.Atoi(fmt.Sprint(viper.Get("TOKEN_HOUR_LIFESPAN")))
 	claims := jwt.MapClaims{}
-	claims["authorized"] = true
 	claims["user_id"] = userID
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(tokenLifespan)).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

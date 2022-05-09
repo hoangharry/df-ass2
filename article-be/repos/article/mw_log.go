@@ -44,6 +44,13 @@ func (mw logMW) GetArticles(page int64, size int) (arts []models.Article, err er
 	return mw.Article.GetArticles(page, size)
 }
 
+func (mw logMW) GetArticlesOfUser(page int64, size int, uid uint) (arts []models.Article, err error) {
+	defer func(begin time.Time) {
+		mw.Log("GetArticlesOfUser", page, arts, err, time.Since(begin))
+	}(time.Now())
+	return mw.Article.GetArticlesOfUser(page, size, uid)
+}
+
 func (mw logMW) AddArticle(art models.Article) (err error) {
 	defer func(begin time.Time) {
 		mw.Log("AddArticle", art, nil, err, time.Since(begin))
@@ -70,4 +77,11 @@ func (mw logMW) CountArticles() (num int64, err error) {
 		mw.Log("CountArticles", nil, num, err, time.Since(begin))
 	}(time.Now())
 	return mw.Article.CountArticles()
+}
+
+func (mw logMW) CountArticlesOfUser(uid uint) (num int64, err error) {
+	defer func(begin time.Time) {
+		mw.Log("CountArticlesOfUser", nil, num, err, time.Since(begin))
+	}(time.Now())
+	return mw.Article.CountArticlesOfUser(uid)
 }

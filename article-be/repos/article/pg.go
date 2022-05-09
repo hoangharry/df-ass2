@@ -25,6 +25,11 @@ func (r *ReposArticle) GetArticles(page int64, size int) ([]models.Article, erro
 	return arts, r.db.Table("article").Order("created_at desc").Limit(size).Offset(int(page-1) * size).Find(&arts).Error
 }
 
+func (r *ReposArticle) GetArticlesOfUser(page int64, size int, uid uint) ([]models.Article, error) {
+	var arts []models.Article
+	return arts, r.db.Table("article").Where("user_id = ?", uid).Order("created_at desc").Limit(size).Offset(int(page-1) * size).Find(&arts).Error
+}
+
 func (r *ReposArticle) AddArticle(art models.Article) error {
 	return r.db.Table("article").Create(&art).Error
 }
@@ -39,7 +44,11 @@ func (r *ReposArticle) DeleteArticleByID(art models.Article) error {
 
 func (r *ReposArticle) CountArticles() (int64, error) {
 	var num int64
-	num = 0
-	return num, r.db.Table("article").Where("deleted = ?", false).Count(&num).Error
+	return num, r.db.Table("article").Count(&num).Error
 
+}
+
+func (r *ReposArticle) CountArticlesOfUser(uid uint) (int64, error) {
+	var num int64
+	return num, r.db.Table("article").Where("user_id = ?", uid).Count(&num).Error
 }

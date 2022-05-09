@@ -3,9 +3,9 @@ package controllers
 import (
 	"df-ass2/article-be/models"
 	"df-ass2/article-be/repos"
+	"df-ass2/article-be/utils/auth"
 	"df-ass2/article-be/utils/token"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
@@ -26,9 +26,9 @@ func (c *UserController) Register(ctx *gin.Context) {
 		return
 	}
 
-	hashPwd, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	hashPwd, err := auth.GeneratePwd(input.Password)
 	if err != nil {
-		ctx.JSON(http.StatusServiceUnavailable, err.Error())
+		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 	u := models.User{
@@ -37,7 +37,7 @@ func (c *UserController) Register(ctx *gin.Context) {
 	}
 	err = c.repo.UserService.AddUser(u)
 	if err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.String(http.StatusCreated, "success")
@@ -54,14 +54,14 @@ func (c *UserController) Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "no user found"})
 		return
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(input.Password))
+	err = auth.ComparePwd(input.Password, u.Password)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect"})
 		return
 	}
 	t, err := token.GenerateToken(u.ID)
 	if err != nil {
-		ctx.JSON(http.StatusServiceUnavailable, err.Error())
+		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"token": t})
