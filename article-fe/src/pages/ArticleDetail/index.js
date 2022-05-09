@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 import { getArticleById } from "../../service/article";
-import Navbar from "../Shared/Navbar";
+import Navbar from "../../Layouts/NavBar";
 
 const SingleArticle = () => {
     // const [article, setArticle] = useState({title: '', description:'', content: '', })

@@ -1,8 +1,8 @@
 import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 import { createArticle } from "../../service/article";
-import Modal from "../Shared/Modal";
-import Navbar from "../Shared/Navbar";
+import Navbar from "../../Layouts/NavBar";
+import Modal from "../../components/Modal";
 
 const EditArticle = () => {
     const article = { title: '', description: '', content: '' };

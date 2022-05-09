@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { login, register } from '../../service/authorization';
-import Modal from '../Shared/Modal';
+import Modal from '../../components/Modal';
 
 const LoginRegister = () => {
     const [usr, setUsr] = useState('');

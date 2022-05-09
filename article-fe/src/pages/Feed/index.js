@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../Shared/Pagination";
-import Navbar from "../Shared/Navbar";
-import ArticleCard from "./ArticleCard";
+import Navbar from "../../Layouts/NavBar";
+import ArticleCard from "../../components/ArticleCard";
 import { getArticles } from "../../service/article";
 
 const MultiArticles = () => {
@@ -44,7 +43,6 @@ const MultiArticles = () => {
                 })
             }
             </div>
-            <Pagination />
         </>
     );
 }

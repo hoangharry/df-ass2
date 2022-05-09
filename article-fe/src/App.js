@@ -1,9 +1,9 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import MultiArticles from './components/MultiArticle/MultiArticles';
-import EditArticle from './components/SingleArticle/EditArticle';
-import SingleArticle from './components/SingleArticle/Article';
-import LoginRegister from './components/LoginAndRegister/LoginRegisterPage';
+import MultiArticles from './pages/Feed';
+import EditArticle from './pages/EditArticle';
+import SingleArticle from './pages/ArticleDetail';
+import LoginRegister from './pages/Login';
 
 function App() {
   return (
