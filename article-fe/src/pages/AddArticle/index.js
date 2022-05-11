@@ -5,11 +5,12 @@ import Navbar from "../../Layouts/NavBar";
 import Modal from "../../components/Modal";
 import { useSearchParams } from "react-router-dom";
 
-const EditArticle = () => {
+const AddArticle = () => {
     const article = { title: '', description: '', content: '' };
     const [title, setTitle] = useState(article.title);
     const [description, setDescription] = useState(article.description);
     const [content, setContent] = useState(article.content);
+    const [imgFile, setImgFile] = useState('');
     const [cate, setCate] = useState('');
     const [isModal, setIsModal] = useState(false);
     const [isFailed, setIsFailed] = useState(false);
@@ -18,6 +19,7 @@ const EditArticle = () => {
     const [titleErr, setTitleErr] = useState(false);
     const [descriptionErr, setDescriptionErr] = useState(false);
     const [contentErr, setContentErr] = useState(false);
+    const [imgFileErr, setImgFileErr] = useState(false);
 
     const [link, setLink] = useState('');
 
@@ -58,6 +60,15 @@ const EditArticle = () => {
         setCate(e.target.value);
     }
 
+    const imgHandler = (e) => {
+        const img = e.target.files[0];
+        let reader = new FileReader();
+        reader.onloadend = function() {
+            setImgFile(reader.result);
+        }
+        reader.readAsDataURL(img);
+    }
+
     const checkForm = () => {
         if (title.trim() === '') {
             setTitleErr(true);
@@ -69,6 +80,10 @@ const EditArticle = () => {
         }
         if (content.trim() === '') {
             setContentErr(true);
+            return false;
+        }
+        if (imgFile.trim() === '') {
+            setImgFileErr(true);
             return false;
         }
         return true;
@@ -111,6 +126,17 @@ const EditArticle = () => {
                 
 
                 <form>
+                <div className="mb-6">
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" htmlFor="user_avatar">Upload theme image</label>
+                    <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                    aria-describedby="user_avatar_help" 
+                    id="user_avatar" 
+                    type="file" 
+                    onChange={imgHandler}
+                    />
+                    { imgFileErr && <span className="text-red-400 text-sm italic">Please fill in this field</span>}
+                    
+                </div>
                     <div className="mb-6">
                         <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title</label>
                         <input type="text" 
@@ -168,4 +194,4 @@ const EditArticle = () => {
     );
 }
 
-export default EditArticle;
+export default AddArticle;
