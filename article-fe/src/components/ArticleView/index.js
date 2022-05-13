@@ -1,12 +1,25 @@
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
-import { PencilIcon } from "@heroicons/react/outline";
-const ArticleView = ({article, user_id}) => {
-    const isUser = article.user_id === user_id
+import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
+import { deleteArticle } from "../../service/article";
+import { useNavigate } from "react-router-dom";
+const ArticleView = ({article}) => {
+    const navigate = useNavigate()
+    console.log(article.user_id)
+    console.log(localStorage.getItem("uid"))
+    const isUser = article.user_id == localStorage.getItem("uid")
+    console.log(isUser)
+    const onDel = () => {
+        deleteArticle(article);
+        navigate('/feed');
+    }
+    const onEdit = () => {
+        navigate('/edit/' + article.title.replaceAll(' ', '-') + '-' + article.id)
+    }
     return (
         <div className="rounded-md drop-shadow-lg bg-white">
                 <div className="flex justify-center rounded">
-                    <img className="w-full max-h-96 flex justify-center" src="https://demo.proteusthemes.com/readable/wp-content/uploads/sites/12/2017/08/photo18.jpg" />
+                    <img className="w-full max-h-96 flex justify-center" alt="https://demo.proteusthemes.com/readable/wp-content/uploads/sites/12/2017/08/photo18.jpg" src={article.img}/>
                 </div>
                 <div className="flex justify-center mt-10 font-sans bg-white">
                     <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 pb-3">{article.title}</h1>
@@ -25,7 +38,7 @@ const ArticleView = ({article, user_id}) => {
                         <div className="w-4/5 border-t border-gray-300"></div>
                         <div className="flex inline-block pt-6 pb-10">
                             <img className="rounded-full w-8 h-8" src='https://secure.gravatar.com/avatar/bdbb8318519395bacd2f98b2a8fe4ab3?s=180&d=mm&r=g'/>
-                            <span className="text-xl font-semibold pl-2">{article.user}</span>
+                            <span className="text-xl font-semibold pl-2">hoanghm</span>
                         </div>
                         
                     </div>
@@ -41,10 +54,16 @@ const ArticleView = ({article, user_id}) => {
                 { isUser && (
                     <div className="insert-x-0 flex justify-center">
                     <button
-                        // onClick={onSave}
+                        onClick={onEdit}
                         className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white hover:text-white px-3 py-2 my-10 rounded-md text-sm font-medium flex">
                         <PencilIcon className="h-6 w-6" aria-hidden="true" />
                         <span className='pt-0.5 pl-0.5'>Edit</span>
+                    </button>
+                    <button
+                        onClick={onDel}
+                        className="ml-2 bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white hover:text-white px-3 py-2 my-10 rounded-md text-sm font-medium flex">
+                        <TrashIcon className="h-6 w-6" aria-hidden="true" />
+                        <span className='pt-0.5 pl-0.5'>Delete</span>
                     </button>
                     </div>
                 )}

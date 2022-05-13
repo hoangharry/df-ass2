@@ -1,67 +1,54 @@
 import { useState } from 'react';
 import { login, register } from '../../service/authorization';
 import Modal from '../../components/Modal';
+import { useNavigate } from 'react-router-dom';
+import { useAuthDispatch } from '../../store/userContext';
+import { loginUser } from '../../store/authReducer';
 
 const LoginRegister = () => {
+    const navigate = useNavigate();
     const [usr, setUsr] = useState('');
     const [pwd, setPwd] = useState('');
-    const [isModal, setIsModal] = useState(false);
-    let isFailed, modalTitle, modalContent, link;
+    const [errStr, setErrStr] = useState('');
+    const dispatch = useAuthDispatch();
     const usrChangeHandler = (e) => {
         setUsr(e.target.value);
     }
 
     const pwdChangeHandler = (e) => {
-        console.log(e)
         setPwd(e.target.value);
     }
 
     const onSignin = async (e) => {
         e.preventDefault();
-        const result = await login(usr, pwd);
-        setIsModal(true);
+        const result = await login(usr, pwd).catch((ev) => {
+            setErrStr('Sign in failed!!!')
+        });
+        console.log(result);
         if (result.status !== 200) {
-            
-            isFailed = true;
-            modalTitle = 'Register failed!'
-            modalContent = 'Please try again!'
+            setErrStr('Sign in failed!!!')
             return
         }
-        isFailed = false;
-        modalTitle = 'Register success!'
-        modalContent = 'Please sign in to continue!'
         localStorage.setItem('auth-jwt', result.data['token']); 
+        localStorage.setItem('uid', result.data['userid']); 
+        loginUser(dispatch, result.data['userid'], result.data['token'])
+        navigate('/feed');
     }
 
     const onRegister = async (e) => {
         e.preventDefault();
-        const result = await register(usr, pwd);
-        setIsModal(true);
-        if (result.status !== 200) {
-            
-            isFailed = true;
-            modalTitle = 'Register failed!'
-            modalContent = 'Please try again!'
+        const result = await register(usr, pwd).catch((ev) => {
+            setErrStr('Register failed!!!')
+        });
+        if (result.status !== 201) {
+            setErrStr('Register failed!!!')
             return
         }
-        isFailed = false;
-        modalTitle = 'Register success!'
-        modalContent = 'Please sign in to continue!'
-
+        setErrStr('Register successfully! Please sign in to continue!!!');
     }
 
     return (
         <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            {
-                isModal && (
-                    <div
-                        className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
-                        id="my-modal"
-                    >
-                        <Modal isFailed={isFailed} title={modalTitle} content={modalContent} link={link} setModal={setIsModal}/>
-                    </div>
-                )
-            }
             <div className="max-w-md w-full space-y-8">
                 <div>
                     <img
@@ -71,7 +58,7 @@ const LoginRegister = () => {
                     />
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account or Register new account</h2>
                 </div>
-                <form className="mt-8 space-y-6" action="#" method="POST">
+                <form className="mt-8 space-y-6" method="POST">
                     <input type="hidden" name="remember" defaultValue="true" />
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
@@ -119,7 +106,7 @@ const LoginRegister = () => {
                             </label>
                         </div>
                     </div>
-
+                    { errStr !== '' && <span className="text-red-400 text-sm italic">{errStr}</span>}
                     <div>
                         <button
                             type="submit"
