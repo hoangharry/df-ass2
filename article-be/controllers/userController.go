@@ -54,7 +54,7 @@ func (c *UserController) Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "no user found"})
 		return
 	}
-	err = auth.ComparePwd(input.Password, u.Password)
+	err = auth.ComparePwd(u.Password, input.Password)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect"})
 		return
@@ -64,6 +64,6 @@ func (c *UserController) Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"token": t})
+	ctx.JSON(http.StatusOK, gin.H{"token": t, "userid": u.ID})
 
 }

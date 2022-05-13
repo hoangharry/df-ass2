@@ -39,6 +39,7 @@ func (c *ArticleController) PostArticle(ctx *gin.Context) {
 		Description: body.Description,
 		Content:     body.Content,
 		Title:       body.Title,
+		Img:         body.Img,
 		CreatedAt:   time.Now(),
 	}
 	err = c.repo.ArticleService.AddArticle(art)
@@ -52,12 +53,12 @@ func (c *ArticleController) PostArticle(ctx *gin.Context) {
 func (c *ArticleController) GetArticles(ctx *gin.Context) {
 	var page models.Pagination
 	if err := ctx.ShouldBind(&page); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "query params are not valid"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"err": err.Error()})
 		return
 	}
 	var arts []models.Article
 	if page.Size == 0 {
-		page.Size = 10
+		page.Size = 6
 	}
 	arts, err := c.repo.ArticleService.GetArticles(int64(page.Page), page.Size)
 	if err != nil {

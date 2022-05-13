@@ -7,6 +7,7 @@ import (
 
 type Article struct {
 	ID          uint                  `json:"id"`
+	Img         string                `json:"img"`
 	Category    string                `json:"category"`
 	UserID      uint                  `json:"user_id"`
 	Title       string                `json:"title"`
@@ -18,8 +19,20 @@ type Article struct {
 
 type ArticleReq struct {
 	ID          uint   `json:"id" binding:"omitempty,gt=0"`
+	Img         string `json:"img"`
 	Category    string `json:"category" binding:"required"`
 	UserID      uint   `json:"user_id" binding:"omitempty,gt=0"`
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Content     string `json:"content" binding:"required"`
+}
+
+type ArticleResponse struct {
+	ID          uint   `json:"id" binding:"omitempty,gt=0"`
+	Img         string `json:"img" binding:"required"`
+	Category    string `json:"category" binding:"required"`
+	UserID      uint   `json:"user_id" binding:"omitempty,gt=0"`
+	Username    string `json:"user"`
 	Title       string `json:"title" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	Content     string `json:"content" binding:"required"`

@@ -15,7 +15,7 @@ func ReadEnv(path string) {
 		panic(fmt.Errorf("Fatal error config file: %w \n", err))
 	}
 	ConfigMap["DB_STR"] = viper.Get("DB_STR")
-	ConfigMap["SERVER_PORT"] = viper.Get("DB_STR")
+	ConfigMap["SERVER_PORT"] = viper.Get("SERVER_PORT")
 	ConfigMap["SECRET_KEY"] = viper.Get("SECRET_KEY")
 	ConfigMap["TOKEN_LIFESPAN"] = viper.Get("TOKEN_HOUR_LIFESPAN")
 }
