@@ -1,34 +1,31 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { getArticleById } from "../../service/article";
+import { useArticleById } from "../../service/article";
 import ArticleView from "../../components/ArticleView";
+import ErrorView from "../../components/ErrorView";
+import Spinner from "../../components/Spinner";
 
 const SingleArticle = () => {
-    // const [article, setArticle] = useState({title: '', description:'', content: '', })
-    let {id} = useParams();
-    const getArticle = async (id) => {
-        const result = await getArticleById(id);
-        if (result.status === 200) {
-            // setArticle(result.data);
-        }
-        
+    const [article, setArticle] = useState({title: '', description:'', content: '', })
+    // let article
+    let { slug } = useParams();
+    const id = slug.split("-").pop()
+
+
+    const { data,  isError} = useArticleById(id)
+    if (isError) {
+        return ErrorView;
     }
-
-    useEffect(() => {
-        getArticle(id);
-    });
-
-    const article = {
-        id: 1,
-        title: "Hello it's a demo",
-        description: "it's ademo and write in markdowm format. it's quite simple",
-        content: "## Hello, **world**!",
+    if (data) {
+        setArticle(data)
+        
     }
     return (
         <div>
             <div className="px-40 py-10 bg-gray-100">
-                <ArticleView article={article} />
+                    <ArticleView article={article} />
+                
             </div>
         </div>
     )

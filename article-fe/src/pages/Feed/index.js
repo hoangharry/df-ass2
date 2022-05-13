@@ -2,32 +2,31 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../Layouts/NavBar";
 import ArticleCard from "../../components/ArticleCard";
-import { getArticles } from "../../service/article";
+import { useGetArticles } from "../../service/article";
 import ReactPaginate from 'react-paginate'
+import ErrorView from "../../components/ErrorView";
 
 const MultiArticles = () => {
-    // const [articles, setArticles] = useState([]);
+    const [articles, setArticles] = useState([]);
     const [total, setTotal] = useState(0);
     const [curPage, setCurPage] = useState(1);
-    const getArticlesView = async (page) => {
-        const result = await getArticles(page);
-        if (result.status === 200) {
-            console.log(result.data)
-            setTotal(result.data.total);
-            // setArticles(result.data.data);
-        }
+
+    const { data, isError } = useGetArticles(curPage);
+    if (isError) {
+        return ErrorView;
     }
 
-    // useEffect(() => {
-    //     getArticlesView(curPage);
-    // }, [curPage])
-    const articles = [
-        { id: 1, title: "hi it's me", description: 'none', content: 'opppppssss'},
-        { id: 2, title: "hi it's me", description: 'none', content: 'opppppssss'},
-        { id: 3, title: "hi it's me", description: 'none', content: 'opppppssss'},
-        { id: 4, title: "hi it's me", description: 'none', content: 'opppppssss'},
-        { id: 5, title: "hi it's me", description: 'none', content: 'opppppssss'},
-    ];
+    if (data) {
+        console.log(data)
+        setTotal(Math.ceil(data.total / 10));
+        setArticles(data.data)
+    }
+
+    const handlePageClick = (e) => {
+        setCurPage(e.selected + 1);
+    }
+
+
 
     return (
         <div className="bg-gray-100">
@@ -39,11 +38,11 @@ const MultiArticles = () => {
             </button>
             </div>
             <div className="mx-24 my-4 border-t border-gray-300"></div>
-            <div className="grid grid-cols-2 gap-12 mx-24 pb-10">
+            <div className="grid grid-cols-3 gap-4 mx-24 pb-10">
             {
                 articles.map((value, idx) => {
                     return (
-                        <Link to={'/article/' + value.title.replaceAll(" ", "-")}>
+                        <Link to={'/articles/' + value.title.replaceAll(" ", "-") + "-" + value.id}>
                             <ArticleCard id={value.id} article={value}/>
                         </Link>
                         
@@ -56,8 +55,9 @@ const MultiArticles = () => {
                 nextLabel="next >"
                 previousLabel="< previous"
                 pageRangeDisplayed={3}
-                pageCount={10}
+                pageCount={total}
                 renderOnZeroPageCount={null}
+                onPageChange={handlePageClick}
                 containerClassName="flex inline-block justify-center pb-8"
                 pageClassName="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 rounded-md relative inline-flex items-center px-4 py-2 border text-sm font-medium"
                 pageLinkClassName="text-center text-base hover:text-grey-500"

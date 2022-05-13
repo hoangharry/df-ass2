@@ -1,37 +1,99 @@
 import axios from 'axios';
+import useSWR from 'swr';
 import { SERVER_URL } from '../constant';
-const ARTICLE_URL = SERVER_URL + '/article';
-const headerAuth = {
-    headers: {
-        Authorization: localStorage.getItem('auth-jwt')
+
+
+const ARTICLE_URL = SERVER_URL + '/articles';
+
+export const useGetArticles = (page) => {
+
+    const fetcher = url => axios({
+        method: "GET",
+        url: url,
+        params: {
+            page: page
+        },
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth-jwt')
+        }
+    }).then(res => res.json()).catch(e => e)
+    const { data, error } = useSWR(ARTICLE_URL, fetcher)
+    return {
+        data: data,
+        isError: error
     }
 }
-export const getArticles = (page) => {
-    return axios.get(ARTICLE_URL, {
-        page: page,
-    }, headerAuth);
+
+export const useArticleById = (id) => {
+    const fetcher = url => axios({
+        method: "GET",
+        url: url,
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth-jwt')
+        }
+    }).then(res => res.data)
+    const { data, error } = useSWR(ARTICLE_URL + '/' + id, fetcher)
+    return {
+        data: data,
+        isError: error
+    }
 }
 
-export const getArticleById = (id) => {
-    return axios.get(ARTICLE_URL + '/' + id, headerAuth);
+export const useCreateArticle = (article) => {
+
+    const fetcher = url => axios({
+        method: "POST",
+        url: url,
+        data: {
+            img: article.imgFile,
+            title: article.title,
+            content: article.content,
+            description: article.description,
+            category: article.category,
+        },
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth-jwt')
+        }
+    })
+    const { data, error } = useSWR(ARTICLE_URL, fetcher)
+    return {
+        data: data,
+        isError: error
+    }
 }
 
-export const createArticle = (article) => {
-    return axios.post(ARTICLE_URL, {
-        article: article,
-    },
-        headerAuth
-    );
+export const useEditArticle = (article) => {
+    const fetcher = url => axios({
+        method: "PUT",
+        url: url,
+        data: {
+            title: article.title,
+            content: article.content,
+            description: article.description,
+            category: article.category,
+        },
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth-jwt')
+        }
+    })
+    const { data, error } = useSWR(ARTICLE_URL + '/' + article.id, fetcher)
+    return {
+        data: data,
+        isError: error
+    }
 }
 
-export const editArticle = (article) => {
-    return axios.put(ARTICLE_URL + '/' + article.id, {
-        article: article,
-    },
-        headerAuth
-    );
-}
-
-export const deleteArticle = (article) => {
-    return axios.delete(ARTICLE_URL + '/' + article.id, headerAuth);
+export const useDeleteArticle = (article) => {
+    const fetcher = url => axios({
+        method: "DELETE",
+        url: url,
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth-jwt')
+        }
+    })
+    const { data, error } = useSWR(ARTICLE_URL + '/' + article.id, fetcher)
+    return {
+        data: data,
+        isError: error
+    }
 }
